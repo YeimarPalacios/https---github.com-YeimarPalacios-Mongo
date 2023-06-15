@@ -918,7 +918,7 @@ async function insertarProveedore() {
 //insertarProveedore();
 
 
-async function insertarCategorias() {
+async function insertarProveedores() {
   const cliente = new MongoClient(uri);
   try {
       await cliente.connect();
@@ -939,7 +939,7 @@ async function insertarCategorias() {
       await cliente.close();
   }
 }
-//insertarCategorias();
+//insertarProveedores();
 
 
 
@@ -1273,6 +1273,39 @@ async function insertarProductos() {
     }
 }
 //insertarProductos();
+
+
+
+async function insertarProducto() {
+  const cliente = new MongoClient(uri);
+  try {
+      await cliente.connect();
+      const resultado = await cliente.db('Soft_Imperio').collection('Productos').insertOne([
+          {
+            _id_Producto: 1,
+            _id_Categoria: 1,
+            _id_Proveedores:1,
+            nombre_producto: "postobon",
+            foto:"postobon.jpg",
+            precio_Producto:"5000"
+          }
+
+
+
+
+      ])
+      console.log(`se a agregaron los registros correctamenta`)
+  } catch (e) {
+      console.log(e);
+  } finally {
+      await cliente.close();
+  }
+}
+//insertarProducto();
+
+
+
+
 
 
 //ver un productos
