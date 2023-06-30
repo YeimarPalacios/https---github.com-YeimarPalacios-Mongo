@@ -51,6 +51,50 @@ async function insertarUsuarios() {
 
 //insertarUsuarios();
 
+async function insertarUnUsuarios() {
+  const cliente = new MongoClient(uri);
+  try {
+    await cliente.connect();
+    const resultado = await cliente.db('Soft_Imperio').collection('Usuarios').insertOne({
+        id_usuario:12,
+        _id_Rol: 1,
+        nombre:'alexa',
+        documento:123456,
+        email: 'alexa@gmail.com',
+        telefono:75255,
+        password:'alexa123',
+        estado:'activo'
+      });
+    console.log('Se agregaron los registros correctamente');
+  } catch (e) {
+    console.log(e);
+  } finally {
+    await cliente.close();
+  }
+}
+//insertarUnUsuarios();
+
+
+
+
+async function insertarUnUsuario() {
+  const cliente = new MongoClient(uri);
+  try {
+      await cliente.connect();
+      const resultado = await cliente.db('Soft_Imperio').collection('Usuarios').insertOne([
+          {
+              _id_Categoria: 4,
+              nombre_Categoria: "Cerveza"
+          }
+      ])
+      console.log(`se a agregaron los registros correctamenta`)
+  } catch (e) {
+      console.log(e);
+  } finally {
+      await cliente.close();
+  }
+}
+//insertarUnUsuario();
 
 //ver un usuarios
 async function VerUsuario() {
@@ -76,7 +120,7 @@ async function VerTUsuarios() {
     try {
         await cliente.connect();
         const resultado = await cliente.db('Soft_Imperio').collection('Usuarios').find(
-            {}, { limit: 2000 }
+            {}, { limit: 2 }
         ).toArray();
         console.log(resultado);
     } catch (e) {
@@ -93,7 +137,7 @@ async function eliminarUsuarios() {
     const cliente = new MongoClient(uri);
     try {
       await cliente.connect();
-      const resultado = await cliente.db('Soft_Imperio').collection('Usuarios').deleteOne({ "id_usuario": 3 });
+      const resultado = await cliente.db('Soft_Imperio').collection('Usuarios').deleteOne({ "id_usuario": 1 });
       console.log('Registro eliminado de usuario');
     } catch (e) {
       console.log(e);
@@ -127,8 +171,8 @@ async function eliminarTUsuarios() {
     const cliente = new MongoClient(uri);
     try {
       await cliente.connect();
-      const resultado = await cliente.db('Soft_Imperio').collection('Usuarios').updateOne({ "id_usuario": 3 },
-        { $set: { nombre: 'kevin', estado: "Inactivo" } }
+      const resultado = await cliente.db('Soft_Imperio').collection('Usuarios').updateOne({ "id_usuario": 1 },
+        { $set: { email: 'yeimar123@gmail.com' } }
       );
       console.log('Registro modificado de usuario');
     } catch (e) {
@@ -188,7 +232,7 @@ async function ordenarUsuarios() {
         await cliente.connect();
         const resultado = await cliente.db('Soft_Imperio').collection('Roles').insertOne([
             {
-              _id_Rol: 3,
+              _id_Rol: 1,
               nombreRol: "prueba"
             }
         ])
@@ -199,7 +243,7 @@ async function ordenarUsuarios() {
         await cliente.close();
     }
 }
- //insertarRol();
+//insertarRol();
 
 async function verRoles() {
   const cliente = new MongoClient(uri);
@@ -218,6 +262,8 @@ async function verRoles() {
 }
 
 //verRoles();
+
+
 
 // eliminar Categorias
 async function eliminarRol() {
@@ -359,9 +405,9 @@ async function insertarUsuarioCredito() {
       await cliente.connect();
       const datosFaker = [];
       var _id_UsuarioCreditos=[];
-      for (let i = 0; i < 2000; i++) {
+      for (let i = 0; i < 5; i++) {
           do{
-              var _id_UsuarioCredi=faker.number.int({ min: 1, max: 2000 })
+              var _id_UsuarioCredi=faker.number.int({ min: 1, max: 5 })
           }while(_id_UsuarioCreditos.includes(_id_UsuarioCredi));
           _id_UsuarioCreditos.push(_id_UsuarioCredi)
           var nombre = faker.person.firstName();
@@ -393,6 +439,27 @@ async function insertarUsuarioCredito() {
   }
 }
 //insertarUsuarioCredito();
+
+
+async function insertarUnUsuarioCredito() {
+  const cliente = new MongoClient(uri);
+  try {
+    await cliente.connect();
+    const resultado = await cliente.db('Soft_Imperio').collection('UsuarioCredito').insertOne({
+      _id_UsuarioCredito:1,
+      nombreUsuarioCredito:'yeimar',
+      documento:43257,
+      Telefono:452348
+      });
+    console.log('Se agregaron los registros correctamente');
+  } catch (e) {
+    console.log(e);
+  } finally {
+    await cliente.close();
+  }
+}
+//insertarUnUsuarioCredito();
+
 
 
 //ver un usuarios
@@ -436,7 +503,7 @@ async function eliminarUsuarioCredito() {
   const cliente = new MongoClient(uri);
   try {
     await cliente.connect();
-    const resultado = await cliente.db('Soft_Imperio').collection('UsuarioCredito').deleteOne({ "_id_UsuarioCredito": 3 });
+    const resultado = await cliente.db('Soft_Imperio').collection('UsuarioCredito').deleteOne({ "_id_UsuarioCredito": 5 });
     console.log('Registro eliminado de Usuario Credito');
   } catch (e) {
     console.log(e);
@@ -470,8 +537,8 @@ async function modificarUsuarioCredito() {
   const cliente = new MongoClient(uri);
   try {
     await cliente.connect();
-    const resultado = await cliente.db('Soft_Imperio').collection('UsuarioCredito').updateOne({ "_id_UsuarioCredito": 3 },
-      { $set: { nombre: 'kevin', estado: "Inactivo" } }
+    const resultado = await cliente.db('Soft_Imperio').collection('UsuarioCredito').updateOne({ "_id_UsuarioCredito": 5 },
+      { $set: { documento:99922, Telefono:444666} }
     );
     console.log('Registro modificado de Usuario Credito');
   } catch (e) {
@@ -537,21 +604,27 @@ async function ordenarUsuarioCredito() {
 
 //para eliminar la base de datos
 
-async function eliminarbasededatos(){
+async function eliminarbasededatos() {
   const cliente = new MongoClient(uri);
   try {
-      await cliente.connect();
-      const db = cliente.db(Soft_Imperio);
-      await db.dropDatabase().drop();
-      console.log('se elimino correctamente');
-  }catch(err) {
-    console.log('No se elimino correctamente' + err.message);
-
-  }finally{
+    await cliente.connect();
+    const db = cliente.db('Soft_Imperio');
+    await db.dropDatabase();
+    console.log('Se eliminó correctamente la base de datos');
+  } catch (err) {
+    console.log('No se eliminó correctamente: ' + err.message);
+  } finally {
     await cliente.close();
   }
 }
+
 //eliminarbasededatos();
+
+
+
+
+
+
 
 
 
@@ -598,23 +671,23 @@ async function crearColeccionCategoria() {
 //Funcion para insertar las carateristicas
 
 async function insertarCategoria() {
-    const cliente = new MongoClient(uri);
-    try {
-        await cliente.connect();
-        const resultado = await cliente.db('Soft_Imperio').collection('Categoria').insertOne([
-            {
-                _id_Categoria: 1,
-                nombre_Categoria: "Cervesas"
-            }
-        ])
-        console.log(`se a agregaron los registros correctamenta`)
-    } catch (e) {
-        console.log(e);
-    } finally {
-        await cliente.close();
-    }
+  const cliente = new MongoClient(uri);
+  try {
+    await cliente.connect();
+    const resultado = await cliente.db('Soft_Imperio').collection('Categoria').insertOne({
+        _id_Categoria: 4,
+        nombre_Categoria: "Cerveza"
+      });
+    console.log('Se agregaron los registros correctamente');
+  } catch (e) {
+    console.log(e);
+  } finally {
+    await cliente.close();
+  }
 }
- //insertarCategoria();
+
+//insertarCategoria();
+
 
  async function insertarCategorias() {
   const cliente = new MongoClient(uri);
@@ -772,43 +845,6 @@ async function Eliminarcollection(){
 
 
 
-//pipeline
-  async function pipelineCategoria(){
-    const cliente = new MongoClient(uri);
-    try{
-      await cliente.connect();
-      const db = cliente.db('Soft_Imperio')
-      const collection = db.collection('Categoria')
-      const pipeline=[
-        { $match: {_id_Categoria: 2}},
-        {sort: {_id_Categoria:1}}
-        ];
-    const result = await collection.aggregate(pipeline).toArray();
-    console.log('la consulta es: ', result)
-    }catch(error){
-      console.log('error en la consulta.', error);
-    }finally{
-      await cliente.close();
-    }
-  }
-pipelineCategoria();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
 
 
 
@@ -871,6 +907,29 @@ async function crearColeccionProveedores() {
 }
 //crearColeccionProveedores();
 
+async function insertarUnProveedores() {
+  const cliente = new MongoClient(uri);
+  try {
+    await cliente.connect();
+    const resultado = await cliente.db('Soft_Imperio').collection('Proveedores').insertOne({
+        _id_Proveedores:1,
+        nombre:'yeimar',
+        documento:'123456',
+        telefono:'75255',
+        email:'imagen',
+        direccion:'calle'
+      });
+    console.log('Se agregaron los registros correctamente');
+  } catch (e) {
+    console.log(e);
+  } finally {
+    await cliente.close();
+  }
+}
+//insertarUnProveedores();
+
+
+
 
 //insertarproveedor
 
@@ -918,28 +977,6 @@ async function insertarProveedore() {
 //insertarProveedore();
 
 
-async function insertarProveedores() {
-  const cliente = new MongoClient(uri);
-  try {
-      await cliente.connect();
-      const resultado = await cliente.db('Soft_Imperio').collection('Proveedores').insertOne([
-          {
-            _id_Proveedores: 1,
-            nombre: "yeimar",
-            documento:"1345672",
-            telefono: "4618762919",
-            email:"yeimarale@gmail.com",
-            direccion:"cll11 #11"
-          }
-      ])
-      console.log(`se a agregaron los registros correctamenta`)
-  } catch (e) {
-      console.log(e);
-  } finally {
-      await cliente.close();
-  }
-}
-//insertarProveedores();
 
 
 
@@ -990,7 +1027,7 @@ async function verTProveedores() {
     const cliente = new MongoClient(uri);
     try {
       await cliente.connect();
-      const resultado = await cliente.db('Soft_Imperio').collection('Proveedores').deleteOne({ "_id_Proveedores": 1 });
+      const resultado = await cliente.db('Soft_Imperio').collection('Proveedores').deleteOne({ "_id_Proveedores": 3 });
       console.log('Registro eliminado de proveedore');
     } catch (e) {
       console.log(e);
@@ -1090,34 +1127,7 @@ async function EliminarcollectionProveedores(){
   //EliminarcollectionProveedores();
 
 
-
-//pipeline
-  async function pipelineProveedores(){
-    const cliente = new MongoClient(uri);
-    try{
-      await cliente.connect();
-      const db = cliente.db('Soft_Imperio')
-      const collection = db.collection('Proveedores')
-      const pipeline=[
-        { $match: {_id_Proveedores: 1000}},
-        {sort: {_id_Proveedores:1}}
-        ];
-    const result = await collection.aggregate(pipeline).toArray();
-    console.log('la consulta es: ', result)
-    }catch(error){
-      console.log('error en la consulta.', error);
-    }finally{
-      await cliente.close();
-    }
-  }
-//pipelineProveedores();
-
-
-
-
-
-
-
+  
 
 
 async function crearColeccionProductos() {
@@ -1276,11 +1286,11 @@ async function insertarProductos() {
 
 
 
-async function insertarProducto() {
+async function insertarUnProductos() {
   const cliente = new MongoClient(uri);
   try {
       await cliente.connect();
-      const resultado = await cliente.db('Soft_Imperio').collection('Productos').insertOne([
+      const resultado = await cliente.db('Soft_Imperio').collection('Productos').insertOne(
           {
             _id_Producto: 1,
             _id_Categoria: 1,
@@ -1289,11 +1299,7 @@ async function insertarProducto() {
             foto:"postobon.jpg",
             precio_Producto:"5000"
           }
-
-
-
-
-      ])
+      )
       console.log(`se a agregaron los registros correctamenta`)
   } catch (e) {
       console.log(e);
@@ -1301,7 +1307,7 @@ async function insertarProducto() {
       await cliente.close();
   }
 }
-//insertarProducto();
+//insertarUnProductos();
 
 
 
@@ -1351,7 +1357,7 @@ async function eliminarProducto() {
     const cliente = new MongoClient(uri);
     try {
       await cliente.connect();
-      const resultado = await cliente.db('Soft_Imperio').collection('Productos').deleteOne({ "_id_Producto": 2 });
+      const resultado = await cliente.db('Soft_Imperio').collection('Productos').deleteOne({ "_id_Producto": 1 });
       console.log('Registro eliminado de producto');
     } catch (e) {
       console.log(e);
@@ -1359,7 +1365,7 @@ async function eliminarProducto() {
       await cliente.close();
     }
   }
-  //eliminarProducto();
+  eliminarProducto();
 
    // eliminar todos los Productos
 async function eliminarTProducto() {
@@ -1374,15 +1380,16 @@ async function eliminarTProducto() {
       await cliente.close();
     }
   }
-  //eliminarTProducto();
+
+//eliminarTProducto();
 
   //modificar Producto
   async function modificarProducto() {
     const cliente = new MongoClient(uri);
     try {
       await cliente.connect();
-      const resultado = await cliente.db('Soft_Imperio').collection('Productos').updateOne({ "_id_Producto": 2 },
-        { $set: { nombre_producto: 'vodka', precio_Producto: "50000" } }
+      const resultado = await cliente.db('Soft_Imperio').collection('Productos').updateOne({ "_id_Producto": 1 },
+        { $set: { precio_Producto: "10000" } }
       );
       console.log('Registro modificado');
     } catch (e) {
@@ -1451,6 +1458,181 @@ async function EliminarcollectionProveedores(){
 
 
 
+//pipeline
+  async function pipelineProductos(){
+    const cliente = new MongoClient(uri);
+    try{
+      await cliente.connect();
+      const db = cliente.db('Soft_Imperio')
+      const collection = db.collection('Productos')
+      const pipeline=[
+        { $match: {_id_Producto: 1000}},
+        {sort: {_id_Producto:1}}
+        ];
+    const result = await collection.aggregate(pipeline).toArray();
+    console.log('la consulta es: ', result)
+    }catch(error){
+      console.log('error en la consulta.', error);
+    }finally{
+      await cliente.close();
+    }
+  }
+//pipelineProductos();
+
+
+
+
+
+
+
+
+
+
+
+
+// lookup 
+
+async function lookup(){
+  const cliente = new MongoClient(uri);
+  try {
+      await cliente.connect();
+      const db = cliente.db(Soft_Imperio);
+      const resultado = await db.collection('Productos').aggregate([
+        {
+          $lookup: {
+            from: 'Categoria',
+            localfield: '_id_Proveedores',
+            foreignfield: '_id_Proveedores',
+            as: '_id_Producto'
+          }
+        }
+      ]).toArray();
+      console.log();
+  }finally{
+    await cliente.close();
+  }
+}
+//lookup();
+
+
+
+  //consulta de agregacion con limit, sort, unwind
+
+  async function ejecutarConsultaProductos() {
+    try {
+      const resultado = new MongoClient([
+        {
+          $sort: { nombre_producto: 1 } // Ordena los documentos por el campo 'nombre' de forma ascendente (1)
+        },
+        {
+          $limit: 200 
+        },
+        {
+          $lookup: {
+            from: "Productos",
+            localField: "_id_Proveedores",
+            foreignField: "_id_Proveedores",
+            as: "_id_Producto"
+          }
+        },
+        {
+          $unwind: "$Productos" // Descompone el campo 'rol' en dorcumentos individuales
+        }
+      ]);
+  
+      // Procesa y organizael resultado de la consulta
+      resultado.forEach(doc => {
+        console.log(doc);
+      });
+    } catch (error) {
+      console.error("Ocurrió un error durante la consulta:", error);
+    } finally {
+      // Código que se ejecuta siempre, independientemente de si ocurre una excepción o no
+      await cliente.close();
+    }
+  }  
+ //ejecutarConsultaProductos();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+async function insertarPedidoVentaBarra() {
+  const cliente = new MongoClient(uri);
+  try {
+      await cliente.connect();
+      const datosFaker = [];
+      var _id_PedidoBarraB= [];
+      for (let i = 0; i < 5; i++) {
+          do{
+              var _id_PedidoB = faker.number.int({ min: 1, max: 6 });
+          }while(_id_PedidoBarraB.includes(_id_PedidoB));
+          _id_PedidoBarraB.push(_id_PedidoB);       
+
+          const fecha=faker.date.recent()
+          const fechas=fecha.toString()
+          const TotalPedidoB=Math.floor(Math.random() * (19999 - 10000 + 1)) + 10000;
+          const precio= TotalPedidoB.toString()
+
+          const datosAInsertar = {
+              _id_PedidoBarra:_id_PedidoB,
+              FechaPedido:fechas,
+              TotalPedidoBarra:precio
+          };
+
+          datosFaker.push(datosAInsertar);
+          console.log(`Se ha agregado ${i + 1} registro(s)`);
+
+      }
+      console.log('Estos son los valores generados por Faker:');
+      console.log(datosFaker);
+      const result = await cliente.db('Soft_Imperio').collection('PedidoVentaBarra').insertMany(datosFaker);
+      if (result) {
+          console.log('se ha ingresado el registro')
+      } else {
+          console.log('ha fallado')
+      }
+  } catch (e) {
+      console.log(e);
+  } finally {
+      await cliente.close();
+  }
+}
+
+//insertarPedidoVentaBarra()  
 //pipeline
   async function pipelineProductos(){
     const cliente = new MongoClient(uri);
